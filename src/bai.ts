@@ -99,9 +99,9 @@ export default class BAI extends IndexFile {
 
       const linearCount = bytes.readInt32LE(currOffset)
       currOffset += 4
-      // as we're going through the linear index, figure out
-      // the smallest virtual offset in the indexes, which
-      // tells us where the BAM header ends
+      // as we're going through the linear index, figure out the smallest
+      // virtual offset in the indexes, which tells us where the BAM header
+      // ends
       const linearIndex = new Array(linearCount)
       for (let k = 0; k < linearCount; k += 1) {
         linearIndex[k] = fromBytes(bytes, currOffset)
@@ -177,18 +177,21 @@ export default class BAI extends IndexFile {
     const e = end !== undefined ? roundUp(end, v) : (linearIndex.length - 1) * v
     const s = start !== undefined ? roundDown(start, v) : 0
 
-    let lastBlock = linearIndex[s / v].blockPosition
+    let lastBlock = linearIndex[Math.floor(s / v)].blockPosition
     let bytes = 0
+    console.log('wow')
     for (
-      let i = s / v, j = 0;
-      i < e / v - 1 && i < linearIndex.length - 1;
+      let i = Math.floor(s / v) + 1, j = 0;
+      i < Math.floor(e / v) && i < linearIndex.length - 1;
       i++, j++
     ) {
-      const currentBlock = linearIndex[i + 1].blockPosition
+      const currentBlock = linearIndex[i].blockPosition
+      console.log({ currentBlock, lastBlock })
       bytes += currentBlock - lastBlock
 
-      lastBlock = linearIndex[i + 1].blockPosition
+      lastBlock = linearIndex[i].blockPosition
     }
+
     return bytes
   }
 

@@ -289,44 +289,34 @@ export default class BamFile {
         chunk: chunks[i],
         opts,
       })
-      const promise = this.readBamFeatures(
-        data,
-        cpositions,
-        dpositions,
-        chunk,
-      ).then(records => {
-        const recs = []
-        for (let i = 0; i < records.length; i += 1) {
-          const feature = records[i]
-          if (feature.seq_id() === chrId) {
-            if (feature.get('start') >= max) {
-              // past end of range, can stop iterating
-              done = true
-              break
-            } else if (feature.get('end') >= min) {
-              // must be in range
-              recs.push(feature)
+      yield this.readBamFeatures(data, cpositions, dpositions, chunk).then(
+        records => {
+          const recs = []
+          for (let i = 0; i < records.length; i += 1) {
+            const feature = records[i]
+            if (feature.seq_id() === chrId) {
+              if (feature.get('start') >= max) {
+                // past end of range, can stop iterating
+                done = true
+                break
+              } else if (feature.get('end') >= min) {
+                // must be in range
+                recs.push(feature)
+              }
             }
           }
-        }
-        return recs
-      })
-      featPromises.push(promise)
-      await promise
+          return recs
+        },
+      )
       if (done) {
         break
       }
     }
 
     checkAbortSignal(opts.signal)
-
-    for (let i = 0; i < featPromises.length; i++) {
-      yield featPromises[i]
-    }
-    checkAbortSignal(opts.signal)
-    if (viewAsPairs) {
-      yield this.fetchPairs(chrId, featPromises, opts)
-    }
+    // if (viewAsPairs) {
+    //   yield this.fetchPairs(chrId, featPromises, opts)
+    // }
   }
 
   async fetchPairs(

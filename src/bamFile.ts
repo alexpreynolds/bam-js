@@ -147,24 +147,7 @@ export default class BamFile {
       : undefined
     let buffer
     if (ret) {
-      const res = await this.bam.read(
-        Buffer.alloc(ret + blockLen),
-        0,
-        ret + blockLen,
-        0,
-        opts,
-      )
-
-      const { bytesRead } = res
-      ;({ buffer } = res)
-      if (!bytesRead) {
-        throw new Error('Error reading header')
-      }
-      if (bytesRead < ret) {
-        buffer = buffer.subarray(0, bytesRead)
-      } else {
-        buffer = buffer.subarray(0, ret)
-      }
+      buffer = await this.bam.read2(ret + blockLen, 0, opts)
     } else {
       buffer = (await this.bam.readFile(opts)) as Buffer
     }

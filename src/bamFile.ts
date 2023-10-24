@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer'
 import crc32 from 'buffer-crc32'
 import { unzip, unzipChunkSlice } from '@gmod/bgzf-filehandle'
-import { LocalFile, RemoteFile, GenericFilehandle } from 'generic-filehandle'
+import { LocalFile, RemoteFile, GenericFilehandle } from 'generic-filehandle2'
 import AbortablePromiseCache from 'abortable-promise-cache'
 import QuickLRU from 'quick-lru'
 
@@ -148,23 +148,21 @@ export default class BamFile {
     let buffer
     if (ret) {
       const s = ret + blockLen
-      const res = await this.bam.read(Buffer.alloc(s), 0, s, 0, opts)
-      if (!res.bytesRead) {
-        throw new Error('Error reading header')
-      }
-      buffer = res.buffer.subarray(0, Math.min(res.bytesRead, ret))
+      buffer = await this.bam.read(s, 0, opts)
     } else {
       buffer = (await this.bam.readFile(opts)) as Buffer
     }
 
     const uncba = await unzip(buffer)
+    const dv = new DataView(uncba.buffer, uncba.byteOffset, uncba.byteLength)
 
-    if (uncba.readInt32LE(0) !== BAM_MAGIC) {
+    if (dv.getInt32(0, true) !== BAM_MAGIC) {
       throw new Error('Not a BAM file')
     }
-    const headLen = uncba.readInt32LE(4)
+    const headLen = dv.getInt32(4, true)
+    const decoder = new TextDecoder('utf8')
 
-    this.header = uncba.toString('utf8', 8, 8 + headLen)
+    this.header = decoder.decode(uncba.subarray(8, 8 + headLen))
     const { chrToIndex, indexToChr } = await this._readRefSeqs(
       headLen + 8,
       65535,
@@ -204,30 +202,21 @@ export default class BamFile {
     if (start > refSeqBytes) {
       return this._readRefSeqs(start, refSeqBytes * 2, opts)
     }
-    const size = refSeqBytes + blockLen
-    const { bytesRead, buffer } = await this.bam.read(
-      Buffer.alloc(size),
-      0,
-      refSeqBytes,
-      0,
-      opts,
-    )
-    if (!bytesRead) {
-      throw new Error('Error reading refseqs from header')
-    }
-    const uncba = await unzip(
-      buffer.subarray(0, Math.min(bytesRead, refSeqBytes)),
-    )
-    const nRef = uncba.readInt32LE(start)
+    const buffer = await this.bam.read(refSeqBytes, 0, opts)
+    const uncba = await unzip(buffer)
+    const dv = new DataView(uncba.buffer, uncba.byteOffset, uncba.byteLength)
+    const nRef = dv.getInt32(start, true)
+    const decoder = new TextDecoder('utf8')
     let p = start + 4
     const chrToIndex: { [key: string]: number } = {}
     const indexToChr: { refName: string; length: number }[] = []
     for (let i = 0; i < nRef; i += 1) {
-      const lName = uncba.readInt32LE(p)
+      const lName = dv.getInt32(p, true)
       const refName = this.renameRefSeq(
-        uncba.toString('utf8', p + 4, p + 4 + lName - 1),
+        decoder.decode(uncba.subarray(p + 4, p + 4 + lName - 1)),
       )
-      const lRef = uncba.readInt32LE(p + lName + 4)
+
+      const lRef = dv.getInt32(p + lName + 4, true)
 
       chrToIndex[refName] = i
       indexToChr.push({ refName, length: lRef })
@@ -387,23 +376,17 @@ export default class BamFile {
     return mateFeatPromises.flat()
   }
 
-  async _readRegion(position: number, size: number, opts: BaseOpts = {}) {
-    const { bytesRead, buffer } = await this.bam.read(
-      Buffer.alloc(size),
-      0,
-      size,
-      position,
+  async _readChunk({ chunk, opts }: { chunk: Chunk; opts: BaseOpts }) {
+    const buffer = await this.bam.read(
+      chunk.fetchedSize(),
+      chunk.minv.blockPosition,
       opts,
     )
-
-    return buffer.subarray(0, Math.min(bytesRead, size))
-  }
-
-  async _readChunk({ chunk, opts }: { chunk: Chunk; opts: BaseOpts }) {
-    const buffer = await this._readRegion(
-      chunk.minv.blockPosition,
+    console.log(
+      'bamFile',
+      buffer.length,
+      buffer.byteLength,
       chunk.fetchedSize(),
-      opts,
     )
 
     const {
@@ -415,7 +398,7 @@ export default class BamFile {
   }
 
   async readBamFeatures(
-    ba: Buffer,
+    ba: Uint8Array,
     cpositions: number[],
     dpositions: number[],
     chunk: Chunk,
@@ -424,9 +407,10 @@ export default class BamFile {
     const sink = [] as BAMFeature[]
     let pos = 0
     let last = +Date.now()
+    const dv = new DataView(ba.buffer, ba.byteOffset, ba.byteLength)
 
-    while (blockStart + 4 < ba.length) {
-      const blockSize = ba.readInt32LE(blockStart)
+    while (blockStart + 4 < dv.byteLength) {
+      const blockSize = dv.getInt32(blockStart, true)
       const blockEnd = blockStart + 4 + blockSize - 1
 
       // increment position to the current decompressed status
@@ -470,7 +454,8 @@ export default class BamFile {
                 chunk.minv.dataPosition +
                 1
               : // must be slice, not subarray for buffer polyfill on web
-                crc32.signed(ba.slice(blockStart, blockEnd)),
+                // @ts-expect-error
+                crc32.signed(ba.subarray(blockStart, blockEnd)),
         })
 
         sink.push(feature)

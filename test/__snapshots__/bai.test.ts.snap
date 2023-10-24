@@ -96,6 +96,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 552,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -110,6 +111,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 817,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -124,6 +126,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 1123,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -138,6 +141,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 1588,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -152,6 +156,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 1686,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -166,6 +171,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 3556,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -180,6 +186,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 3749,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -194,6 +201,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 4054,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -208,6 +216,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 4189,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -222,6 +231,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 4532,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -236,6 +246,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 5046,
       "start": 0,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -250,6 +261,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 180,
       "start": 1,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -264,6 +276,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 3084,
       "start": 1,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -278,6 +291,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 3036,
       "start": 2,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -292,6 +306,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 1792,
       "start": 3,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -306,6 +321,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 2310,
       "start": 3,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -320,6 +336,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 1581,
       "start": 17,
     },
+    "dv": DataView [],
     "flags": 16,
   },
   {
@@ -334,6 +351,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 3645,
       "start": 31,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -348,6 +366,7 @@ exports[`check ecoli header and records 2`] = `
       "seq_length": 1560,
       "start": 35,
     },
+    "dv": DataView [],
     "flags": 0,
   },
 ]
@@ -367,6 +386,7 @@ exports[`deep check 1000 genomes bai 1`] = `
       "seq_length": 250,
       "start": 9999,
     },
+    "dv": DataView [],
     "flags": 145,
   },
 ]
@@ -386,6 +406,7 @@ exports[`deep check volvox-sorted.bam 1`] = `
       "seq_length": 100,
       "start": 2,
     },
+    "dv": DataView [],
     "flags": 0,
   },
   {
@@ -400,6 +421,7 @@ exports[`deep check volvox-sorted.bam 1`] = `
       "seq_length": 100,
       "start": 7,
     },
+    "dv": DataView [],
     "flags": 0,
   },
 ]

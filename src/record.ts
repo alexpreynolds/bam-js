@@ -9,7 +9,8 @@ const CIGAR_DECODER = 'MIDNSHP=X???????'.split('')
  */
 export default class BamRecord {
   private data = {} as { [key: string]: any }
-  private bytes: { start: number; end: number; byteArray: Buffer }
+  private bytes: { start: number; end: number; byteArray: Uint8Array }
+  private dv: DataView
   private _id: number
   private _tagOffset: number | undefined
   private _tagList: string[] = []
@@ -19,23 +20,27 @@ export default class BamRecord {
   public _refID: number
   constructor(args: any) {
     const { bytes, fileOffset } = args
-    const { byteArray, start } = bytes
+    const { start } = bytes
     this.data = {}
     this.bytes = bytes
     this._id = fileOffset
-    this._refID = byteArray.readInt32LE(start + 4)
-    this.data.start = byteArray.readInt32LE(start + 8)
-    this.flags = (byteArray.readInt32LE(start + 16) & 0xffff0000) >> 16
+    this.dv = new DataView(
+      this.bytes.byteArray.buffer,
+      this.bytes.byteArray.byteOffset,
+      this.bytes.byteArray.byteLength,
+    )
+    this._refID = this.dv.getInt32(start + 4, true)
+    this.data.start = this.dv.getInt32(start + 8, true)
+    this.flags = (this.dv.getInt32(start + 16, true) & 0xffff0000) >> 16
   }
 
   get(field: string) {
-    //@ts-ignore
+    //@ts-expect-error
     if (this[field]) {
-      //@ts-ignore
       if (this.data[field]) {
         return this.data[field]
       }
-      //@ts-ignore
+      //@ts-expect-error
       this.data[field] = this[field]()
       return this.data[field]
     }
@@ -169,7 +174,8 @@ export default class BamRecord {
   _read_name() {
     const nl = this.get('_l_read_name')
     const { byteArray, start } = this.bytes
-    return byteArray.toString('ascii', start + 36, start + 36 + nl - 1)
+    const decoder = new TextDecoder('ascii')
+    return decoder.decode(byteArray.subarray(start + 36, start + 36 + nl - 1))
   }
 
   /**
@@ -210,37 +216,37 @@ export default class BamRecord {
           break
         }
         case 'i': {
-          value = byteArray.readInt32LE(p)
+          value = this.dv.getInt32(p, true)
           p += 4
           break
         }
         case 'I': {
-          value = byteArray.readUInt32LE(p)
+          value = this.dv.getUint32(p, true)
           p += 4
           break
         }
         case 'c': {
-          value = byteArray.readInt8(p)
+          value = this.dv.getInt8(p)
           p += 1
           break
         }
         case 'C': {
-          value = byteArray.readUInt8(p)
+          value = this.dv.getUint8(p)
           p += 1
           break
         }
         case 's': {
-          value = byteArray.readInt16LE(p)
+          value = this.dv.getInt16(p, true)
           p += 2
           break
         }
         case 'S': {
-          value = byteArray.readUInt16LE(p)
+          value = this.dv.getUint16(p, true)
           p += 2
           break
         }
         case 'f': {
-          value = byteArray.readFloatLE(p)
+          value = this.dv.getFloat32(p, true)
           p += 4
           break
         }
@@ -261,12 +267,12 @@ export default class BamRecord {
           value = ''
           const cc = byteArray[p++]
           const Btype = String.fromCharCode(cc)
-          const limit = byteArray.readInt32LE(p)
+          const limit = this.dv.getInt32(p, true)
           p += 4
           if (Btype === 'i') {
             if (tag === 'CG') {
               for (let k = 0; k < limit; k++) {
-                const cigop = byteArray.readInt32LE(p)
+                const cigop = this.dv.getUint32(p, true)
                 const lop = cigop >> 4
                 const op = CIGAR_DECODER[cigop & 0xf]
                 value += lop + op
@@ -274,7 +280,7 @@ export default class BamRecord {
               }
             } else {
               for (let k = 0; k < limit; k++) {
-                value += byteArray.readInt32LE(p)
+                value += this.dv.getInt32(p, true)
                 if (k + 1 < limit) {
                   value += ','
                 }
@@ -285,7 +291,7 @@ export default class BamRecord {
           if (Btype === 'I') {
             if (tag === 'CG') {
               for (let k = 0; k < limit; k++) {
-                const cigop = byteArray.readUInt32LE(p)
+                const cigop = this.dv.getInt32(p, true)
                 const lop = cigop >> 4
                 const op = CIGAR_DECODER[cigop & 0xf]
                 value += lop + op
@@ -293,7 +299,7 @@ export default class BamRecord {
               }
             } else {
               for (let k = 0; k < limit; k++) {
-                value += byteArray.readUInt32LE(p)
+                value += this.dv.getUint32(p, true)
                 if (k + 1 < limit) {
                   value += ','
                 }
@@ -303,7 +309,7 @@ export default class BamRecord {
           }
           if (Btype === 's') {
             for (let k = 0; k < limit; k++) {
-              value += byteArray.readInt16LE(p)
+              value += this.dv.getInt16(p, true)
               if (k + 1 < limit) {
                 value += ','
               }
@@ -312,7 +318,7 @@ export default class BamRecord {
           }
           if (Btype === 'S') {
             for (let k = 0; k < limit; k++) {
-              value += byteArray.readUInt16LE(p)
+              value += this.dv.getUint16(p, true)
               if (k + 1 < limit) {
                 value += ','
               }
@@ -321,7 +327,7 @@ export default class BamRecord {
           }
           if (Btype === 'c') {
             for (let k = 0; k < limit; k++) {
-              value += byteArray.readInt8(p)
+              value += this.dv.getInt8(p)
               if (k + 1 < limit) {
                 value += ','
               }
@@ -330,7 +336,7 @@ export default class BamRecord {
           }
           if (Btype === 'C') {
             for (let k = 0; k < limit; k++) {
-              value += byteArray.readUInt8(p)
+              value += this.dv.getUint8(p)
               if (k + 1 < limit) {
                 value += ','
               }
@@ -339,7 +345,7 @@ export default class BamRecord {
           }
           if (Btype === 'f') {
             for (let k = 0; k < limit; k++) {
-              value += byteArray.readFloatLE(p)
+              value += this.dv.getFloat32(p, true)
               if (k + 1 < limit) {
                 value += ','
               }
@@ -374,10 +380,10 @@ export default class BamRecord {
 
   _parseCigar(cigar: string) {
     return (
-      //@ts-ignore
+      //@ts-expect-error
       cigar
         .match(/\d+\D/g)
-        //@ts-ignore
+        //@ts-expect-error
         .map(op => [op.match(/\D/)[0].toUpperCase(), Number.parseInt(op, 10)])
     )
   }
@@ -458,14 +464,14 @@ export default class BamRecord {
 
     // check for CG tag by inspecting whether the CIGAR field
     // contains a clip that consumes entire seqLen
-    let cigop = byteArray.readInt32LE(p)
+    let cigop = this.dv.getInt32(p, true)
     let lop = cigop >> 4
     let op = CIGAR_DECODER[cigop & 0xf]
     if (op === 'S' && lop === seqLen) {
       // if there is a CG the second CIGAR field will
       // be a N tag the represents the length on ref
       p += 4
-      cigop = byteArray.readInt32LE(p)
+      cigop = this.dv.getInt32(p, true)
       lop = cigop >> 4
       op = CIGAR_DECODER[cigop & 0xf]
       if (op !== 'N') {
@@ -475,7 +481,7 @@ export default class BamRecord {
       return this.get('CG')
     } else {
       for (let c = 0; c < numCigarOps; ++c) {
-        cigop = byteArray.readInt32LE(p)
+        cigop = this.dv.getInt32(p, true)
         lop = cigop >> 4
         op = CIGAR_DECODER[cigop & 0xf]
         cigar += lop + op
@@ -582,27 +588,27 @@ export default class BamRecord {
   }
 
   _bin_mq_nl() {
-    return this.bytes.byteArray.readInt32LE(this.bytes.start + 12)
+    return this.dv.getInt32(this.bytes.start + 12, true)
   }
 
   _flag_nc() {
-    return this.bytes.byteArray.readInt32LE(this.bytes.start + 16)
+    return this.dv.getInt32(this.bytes.start + 16, true)
   }
 
   seq_length() {
-    return this.bytes.byteArray.readInt32LE(this.bytes.start + 20)
+    return this.dv.getInt32(this.bytes.start + 20, true)
   }
 
   _next_refid() {
-    return this.bytes.byteArray.readInt32LE(this.bytes.start + 24)
+    return this.dv.getInt32(this.bytes.start + 24, true)
   }
 
   _next_pos() {
-    return this.bytes.byteArray.readInt32LE(this.bytes.start + 28)
+    return this.dv.getInt32(this.bytes.start + 28, true)
   }
 
   template_length() {
-    return this.bytes.byteArray.readInt32LE(this.bytes.start + 32)
+    return this.dv.getInt32(this.bytes.start + 32, true)
   }
 
   toJSON() {
@@ -611,7 +617,7 @@ export default class BamRecord {
       if (k.charAt(0) === '_' || k === 'bytes') {
         continue
       }
-      //@ts-ignore
+      //@ts-expect-error
       data[k] = this[k]
     }
 

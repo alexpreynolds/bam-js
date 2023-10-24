@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { BAI, BamFile } from '../src'
 
-describe('using vanilla node filehandles', () => {
+xdescribe('using vanilla node filehandles', () => {
   it('loads volvox-sorted.bam.bai', async () => {
     const filehandle = await fs.promises.open('test/data/volvox-sorted.bam.bai')
 

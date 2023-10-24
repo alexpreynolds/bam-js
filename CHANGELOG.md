@@ -18,7 +18,7 @@
 
 ## [1.1.17](https://github.com/GMOD/bam-js/compare/v1.1.16...v1.1.17) (2022-07-18)
 
-- Bump devDeps and generic-filehandle to 3.0.0
+- Bump devDeps and generic-filehandle2 to 3.0.0
 
 ## [1.1.16](https://github.com/GMOD/bam-js/compare/v1.1.15...v1.1.16) (2022-03-30)
 
@@ -289,7 +289,7 @@
 
 ## [1.0.18](https://github.com/GMOD/bam-js/compare/v1.0.17...v1.0.18) (2019-05-01)
 
-- Bump generic-filehandle to 1.0.9 to fix error with using native fetch (global
+- Bump generic-filehandle2 to 1.0.9 to fix error with using native fetch (global
   fetch needed to be bound)
 - Bump abortable-promise-cache to 1.0.1 version to fix error with using native
   fetch and abort signals

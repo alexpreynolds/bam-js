@@ -112,7 +112,7 @@ export function optimizeChunks(chunks: Chunk[], lowest?: VirtualOffset) {
   return mergedChunks
 }
 
-export function parsePseudoBin(bytes: Buffer, offset: number) {
+export function parsePseudoBin(bytes: Uint8Array, offset: number) {
   const lineCount = longToNumber(
     Long.fromBytesLE(
       Array.prototype.slice.call(bytes, offset, offset + 8),
@@ -134,17 +134,18 @@ export function findFirstData(
 }
 
 export function parseNameBytes(
-  namesBytes: Buffer,
+  namesBytes: Uint8Array,
   renameRefSeq: (arg: string) => string = s => s,
 ) {
   let currRefId = 0
   let currNameStart = 0
   const refIdToName = []
   const refNameToId: { [key: string]: number } = {}
+  const decoder = new TextDecoder('utf8')
   for (let i = 0; i < namesBytes.length; i += 1) {
     if (!namesBytes[i]) {
       if (currNameStart < i) {
-        let refName = namesBytes.toString('utf8', currNameStart, i)
+        let refName = decoder.decode(namesBytes.subarray(currNameStart, i))
         refName = renameRefSeq(refName)
         refIdToName[currRefId] = refName
         refNameToId[refName] = currRefId

@@ -59,9 +59,7 @@ export default class BamFile {
             length: number;
         }[];
     }>;
-    getRecordsForRangeSample(chr: string, min: number, max: number, opts?: BamOpts): Promise<any>;
     getRecordsForRange(chr: string, min: number, max: number, opts?: BamOpts): Promise<BAMFeature[]>;
-    streamRecordsForRangeSample(chr: string, min: number, max: number, opts?: BamOpts): Promise<any>;
     streamRecordsForRange(chr: string, min: number, max: number, opts?: BamOpts): AsyncGenerator<BAMFeature[], void, unknown>;
     _fetchChunkFeatures(chunks: Chunk[], chrId: number, min: number, max: number, opts?: BamOpts): AsyncGenerator<BAMFeature[], void, unknown>;
     fetchPairs(chrId: number, feats: BAMFeature[][], opts: BamOpts): Promise<BAMFeature[]>;

@@ -4,7 +4,7 @@ import { unzip, unzipChunkSlice } from '@gmod/bgzf-filehandle'
 import { LocalFile, RemoteFile, GenericFilehandle } from 'generic-filehandle'
 import AbortablePromiseCache from 'abortable-promise-cache'
 import QuickLRU from 'quick-lru'
-import Reservoir from 'reservoir'
+// import Reservoir from 'reservoir'
 
 // locals
 import BAI from './bai'
@@ -244,28 +244,28 @@ export default class BamFile {
     return { chrToIndex, indexToChr }
   }
 
-  async getRecordsForRangeSample(
-    chr: string,
-    min: number,
-    max: number,
-    opts?: BamOpts,
-  ) {
-    if (!opts) {
-      return this.getRecordsForRange(chr, min, max, opts)
-    }
-    if (opts.maxSampleSize) {
-      const allRecords = await gen2array(
-        this.streamRecordsForRange(chr, min, max, opts),
-      )
-      const resSize = +opts.maxSampleSize
-      const res = new (Reservoir as any)(resSize)
-      for (const record of allRecords) {
-        res.pushSome(record)
-      }
-      return res
-    }
-    return this.getRecordsForRange(chr, min, max, opts)
-  }
+  // async getRecordsForRangeSample(
+  //   chr: string,
+  //   min: number,
+  //   max: number,
+  //   opts?: BamOpts,
+  // ) {
+  //   if (!opts) {
+  //     return this.getRecordsForRange(chr, min, max, opts)
+  //   }
+  //   if (opts.maxSampleSize) {
+  //     const allRecords = await gen2array(
+  //       this.streamRecordsForRange(chr, min, max, opts),
+  //     )
+  //     const resSize = +opts.maxSampleSize
+  //     const res = new (Reservoir as any)(resSize)
+  //     for (const record of allRecords) {
+  //       res.pushSome(record)
+  //     }
+  //     return res
+  //   }
+  //   return this.getRecordsForRange(chr, min, max, opts)
+  // }
 
   async getRecordsForRange(
     chr: string,
@@ -276,32 +276,32 @@ export default class BamFile {
     return gen2array(this.streamRecordsForRange(chr, min, max, opts))
   }
 
-  async streamRecordsForRangeSample(
-    chr: string,
-    min: number,
-    max: number,
-    opts?: BamOpts,
-  ) {
-    if (!opts) {
-      return this.getRecordsForRange(chr, min, max, opts)
-    }
-    if (opts.maxSampleSize) {
-      const resSize = +opts.maxSampleSize
-      const res = new (Reservoir as any)(resSize)
-      for await (const chunk of this.streamRecordsForRange(
-        chr,
-        min,
-        max,
-        opts,
-      )) {
-        for (const record of chunk) {
-          res.pushSome(record)
-        }
-      }
-      return res
-    }
-    return this.getRecordsForRange(chr, min, max, opts)
-  }
+  // async streamRecordsForRangeSample(
+  //   chr: string,
+  //   min: number,
+  //   max: number,
+  //   opts?: BamOpts,
+  // ) {
+  //   if (!opts) {
+  //     return this.getRecordsForRange(chr, min, max, opts)
+  //   }
+  //   if (opts.maxSampleSize) {
+  //     const resSize = +opts.maxSampleSize
+  //     const res = new (Reservoir as any)(resSize)
+  //     for await (const chunk of this.streamRecordsForRange(
+  //       chr,
+  //       min,
+  //       max,
+  //       opts,
+  //     )) {
+  //       for (const record of chunk) {
+  //         res.pushSome(record)
+  //       }
+  //     }
+  //     return res
+  //   }
+  //   return this.getRecordsForRange(chr, min, max, opts)
+  // }
 
   async *streamRecordsForRange(
     chr: string,

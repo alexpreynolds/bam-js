@@ -94,6 +94,26 @@ Note: you must run getHeader before running getRecordsForRange
 - `opts.maxInsertSize` - control the viewAsPairs option behavior to limit
   distance within a chromosome to fetch. default: 200kb
 
+### async getRecordsForRangeSample(refName, start, end, opts)
+
+This async generator has the same signature as `getRecordsForRange` 
+but uses the `maxSampleSize` property in `opts` to limit the number 
+of reads retrieved over the input interval. This could be useful for 
+visualizing reads with third-party frameworks, where the interval has 
+high depth of coverage, e.g.
+
+```typescript
+const result = await file.getRecordsForRangeSample(
+  bamChrom, 
+  bamStart, 
+  bamEnd, 
+  { maxSampleSize: reservoirSize }
+)
+```
+
+A similar BAM reader method is available via `streamRecordsForRangeSample`.
+Both methods return an Array of BAM features.
+
 ### async \*streamRecordsForRange(refName, start, end, opts)
 
 This is a async generator function that takes the same signature as

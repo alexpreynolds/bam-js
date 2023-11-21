@@ -1,5 +1,5 @@
 {
-  "name": "apr144/bam",
+  "name": "apr144-bam",
   "version": "2.0.0",
   "description": "Parser for BAM and BAM index (bai) files",
   "license": "MIT",

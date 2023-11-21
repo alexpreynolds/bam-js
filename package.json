@@ -1,9 +1,9 @@
 {
-  "name": "@gmod/bam",
-  "version": "1.1.8",
+  "name": "apr144-bam",
+  "version": "1.1.8-rs",
   "description": "Parser for BAM and BAM index (bai) files",
   "license": "MIT",
-  "repository": "GMOD/bam-js",
+  "repository": "alexpreynolds/bam-js",
   "main": "dist/index.js",
   "author": {
     "name": "Colin Diesh",
@@ -41,6 +41,7 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.5.5",
     "@gmod/bgzf-filehandle": "^1.3.3",
+    "@types/reservoir": "^0.1.6",
     "abortable-promise-cache": "^1.4.0",
     "buffer-crc32": "^0.2.13",
     "cross-fetch": "^3.0.2",
@@ -49,7 +50,8 @@
     "long": "^4.0.0",
     "object.entries-ponyfill": "^1.0.1",
     "quick-lru": "^2.0.0",
-    "range-parser": "^1.2.1"
+    "range-parser": "^1.2.1",
+    "reservoir": "^0.1.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

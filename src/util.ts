@@ -64,6 +64,7 @@ export interface BamOpts {
   pairAcrossChr?: boolean
   maxInsertSize?: number
   signal?: AbortSignal
+  maxSampleSize?: number
 }
 
 export interface BaseOpts {

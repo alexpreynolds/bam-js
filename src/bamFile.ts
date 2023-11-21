@@ -212,10 +212,10 @@ export default class BamFile {
     },
   ) {
     if (!opts) {
-      return this.getRecordsForRange(chr, min, max, opts)
+      return await this.getRecordsForRange(chr, min, max, opts)
     }
     if (opts.maxSampleSize) {
-      const allRecords = await gen2array(this.streamRecordsForRange(chr, min, max, opts))
+      const allRecords = await this.getRecordsForRange(chr, min, max, opts)
       const resSize = +opts.maxSampleSize
       const res = new (Reservoir as any)(resSize)
       for (const record of allRecords) {
@@ -223,7 +223,7 @@ export default class BamFile {
       }
       return res
     }
-    return this.getRecordsForRange(chr, min, max, opts)
+    return await this.getRecordsForRange(chr, min, max, opts)
   }
 
   async getRecordsForRange(

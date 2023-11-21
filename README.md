@@ -111,8 +111,10 @@ const result = await file.getRecordsForRangeSample(
 )
 ```
 
-A similar BAM reader method is available via `streamRecordsForRangeSample`.
-Both methods return an Array of BAM features.
+A similar BAM reader method is available via `streamRecordsForRangeSample`
+
+Both methods return an Array of BAM features of length `reservoirSize` or 
+smaller
 
 ### async \*streamRecordsForRange(refName, start, end, opts)
 

@@ -1,9 +1,9 @@
 {
-  "name": "@gmod/bam",
+  "name": "apr144/bam",
   "version": "2.0.0",
   "description": "Parser for BAM and BAM index (bai) files",
   "license": "MIT",
-  "repository": "GMOD/bam-js",
+  "repository": "alexpreynolds/bam-js",
   "main": "dist/index.js",
   "module": "esm/index.js",
   "author": {

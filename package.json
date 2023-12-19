@@ -1,6 +1,6 @@
 {
   "name": "apr144-bam",
-  "version": "2.0.0",
+  "version": "2.0.0-rs-121823",
   "description": "Parser for BAM and BAM index (bai) files",
   "license": "MIT",
   "repository": "alexpreynolds/bam-js",
@@ -51,6 +51,7 @@
     "@types/jest": "^29.5.1",
     "@types/long": "^4.0.0",
     "@types/node": "^18.16.0",
+    "@types/reservoir": "^0.1.6",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
     "eslint": "^8.54.0",

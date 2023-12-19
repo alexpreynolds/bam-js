@@ -258,11 +258,16 @@ export default class BamFile {
         this.streamRecordsForRange(chr, min, max, opts),
       )
       const resSize = +opts.maxSampleSize
-      const res = new (Reservoir as any)(resSize)
-      for (const record of allRecords) {
-        res.pushSome(record)
+      console.warn(`resSize ${resSize} allRecords.length ${allRecords.length}`)
+      if (resSize < allRecords.length) {
+        const res = new (Reservoir as any)(resSize)
+        for (const record of allRecords) {
+          res.pushSome(record)
+        }
+        return res
+      } else {
+        return allRecords
       }
-      return res
     }
     return this.getRecordsForRange(chr, min, max, opts)
   }

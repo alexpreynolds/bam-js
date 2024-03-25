@@ -247,8 +247,9 @@ class BamFile {
             }
             if (opts.maxSampleSize) {
                 const allRecords = yield gen2array(this.streamRecordsForRange(chr, min, max, opts));
+                console.log(`allRecords.length ${allRecords.length}`);
                 const resSize = +opts.maxSampleSize;
-                console.warn(`resSize ${resSize} allRecords.length ${allRecords.length}`);
+                console.log(`resSize ${resSize}`);
                 if (resSize < allRecords.length) {
                     const res = new reservoir_1.default(resSize);
                     for (const record of allRecords) {

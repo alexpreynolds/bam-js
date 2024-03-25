@@ -257,8 +257,9 @@ export default class BamFile {
       const allRecords = await gen2array(
         this.streamRecordsForRange(chr, min, max, opts),
       )
+      console.log(`allRecords.length ${allRecords.length}`)
       const resSize = +opts.maxSampleSize
-      console.warn(`resSize ${resSize} allRecords.length ${allRecords.length}`)
+      console.log(`resSize ${resSize}`)
       if (resSize < allRecords.length) {
         const res = new (Reservoir as any)(resSize)
         for (const record of allRecords) {

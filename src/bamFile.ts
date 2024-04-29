@@ -1,7 +1,11 @@
 import { Buffer } from 'buffer'
 import crc32 from 'buffer-crc32'
 import { unzip, unzipChunkSlice } from '@gmod/bgzf-filehandle'
-import { LocalFile, RemoteFile, GenericFilehandle } from 'generic-filehandle'
+import {
+  LocalFile,
+  RemoteFile,
+  GenericFilehandle,
+} from 'apr144-generic-filehandle'
 import AbortablePromiseCache from 'abortable-promise-cache'
 import QuickLRU from 'quick-lru'
 import Reservoir from 'reservoir'
@@ -111,9 +115,10 @@ export default class BamFile {
       const bamUrlPassword = bamUrlObj.password
       if (bamUrlUsername && bamUrlPassword) {
         bamUrl = `${bamUrlObj.protocol}//${bamUrlObj.host}${bamUrlObj.pathname}${bamUrlObj.search}`
-        this.bam = new RemoteFile(bamUrl, { auth: { bamUrlUsername, bamUrlPassword } })
-      }
-      else {
+        this.bam = new RemoteFile(bamUrl, {
+          auth: { user: bamUrlUsername, password: bamUrlPassword },
+        })
+      } else {
         this.bam = new RemoteFile(bamUrl)
       }
     } else if (htsget) {
@@ -132,9 +137,12 @@ export default class BamFile {
       const csiUrlPassword = csiUrlObj.password
       if (csiUrlUsername && csiUrlPassword) {
         csiUrl = `${csiUrlObj.protocol}//${csiUrlObj.host}${csiUrlObj.pathname}${csiUrlObj.search}`
-        this.index = new CSI({ filehandle: new RemoteFile(csiUrl, { auth: { csiUrlUsername, csiUrlPassword } }) })
-      }
-      else {
+        this.index = new CSI({
+          filehandle: new RemoteFile(csiUrl, {
+            auth: { user: csiUrlUsername, password: csiUrlPassword },
+          }),
+        })
+      } else {
         this.index = new CSI({ filehandle: new RemoteFile(csiUrl) })
       }
     } else if (baiFilehandle) {
@@ -147,9 +155,12 @@ export default class BamFile {
       const baiUrlPassword = baiUrlObj.password
       if (baiUrlUsername && baiUrlPassword) {
         baiUrl = `${baiUrlObj.protocol}//${baiUrlObj.host}${baiUrlObj.pathname}${baiUrlObj.search}`
-        this.index = new BAI({ filehandle: new RemoteFile(baiUrl, { auth: { baiUrlUsername, baiUrlPassword } }) })
-      }
-      else {
+        this.index = new BAI({
+          filehandle: new RemoteFile(baiUrl, {
+            auth: { user: baiUrlUsername, password: baiUrlPassword },
+          }),
+        })
+      } else {
         this.index = new BAI({ filehandle: new RemoteFile(baiUrl) })
       }
     } else if (bamPath) {
@@ -160,9 +171,12 @@ export default class BamFile {
       const bamOnlyUrlPassword = bamOnlyUrlObj.password
       if (bamOnlyUrlUsername && bamOnlyUrlPassword) {
         bamUrl = `${bamOnlyUrlObj.protocol}//${bamOnlyUrlObj.host}${bamOnlyUrlObj.pathname}${bamOnlyUrlObj.search}`
-        this.index = new BAI({ filehandle: new RemoteFile(`${bamUrl}.bai`, { auth: { bamOnlyUrlUsername, bamOnlyUrlPassword } }) })
-      }
-      else {
+        this.index = new BAI({
+          filehandle: new RemoteFile(`${bamUrl}.bai`, {
+            auth: { user: bamOnlyUrlUsername, password: bamOnlyUrlPassword },
+          }),
+        })
+      } else {
         this.index = new BAI({ filehandle: new RemoteFile(`${bamUrl}.bai`) })
       }
     } else if (htsget) {

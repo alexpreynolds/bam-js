@@ -40,7 +40,7 @@ exports.BAM_MAGIC = void 0;
 const buffer_1 = require("buffer");
 const buffer_crc32_1 = __importDefault(require("buffer-crc32"));
 const bgzf_filehandle_1 = require("@gmod/bgzf-filehandle");
-const generic_filehandle_1 = require("generic-filehandle");
+const apr144_generic_filehandle_1 = require("apr144-generic-filehandle");
 const abortable_promise_cache_1 = __importDefault(require("abortable-promise-cache"));
 const quick_lru_1 = __importDefault(require("quick-lru"));
 const reservoir_1 = __importDefault(require("reservoir"));
@@ -115,10 +115,21 @@ class BamFile {
             this.bam = bamFilehandle;
         }
         else if (bamPath) {
-            this.bam = new generic_filehandle_1.LocalFile(bamPath);
+            this.bam = new apr144_generic_filehandle_1.LocalFile(bamPath);
         }
         else if (bamUrl) {
-            this.bam = new generic_filehandle_1.RemoteFile(bamUrl);
+            const bamUrlObj = new URL(bamUrl);
+            const bamUrlUsername = bamUrlObj.username;
+            const bamUrlPassword = bamUrlObj.password;
+            if (bamUrlUsername && bamUrlPassword) {
+                bamUrl = `${bamUrlObj.protocol}//${bamUrlObj.host}${bamUrlObj.pathname}${bamUrlObj.search}`;
+                this.bam = new apr144_generic_filehandle_1.RemoteFile(bamUrl, {
+                    auth: { user: bamUrlUsername, password: bamUrlPassword },
+                });
+            }
+            else {
+                this.bam = new apr144_generic_filehandle_1.RemoteFile(bamUrl);
+            }
         }
         else if (htsget) {
             this.htsget = true;
@@ -131,25 +142,64 @@ class BamFile {
             this.index = new csi_1.default({ filehandle: csiFilehandle });
         }
         else if (csiPath) {
-            this.index = new csi_1.default({ filehandle: new generic_filehandle_1.LocalFile(csiPath) });
+            this.index = new csi_1.default({ filehandle: new apr144_generic_filehandle_1.LocalFile(csiPath) });
         }
         else if (csiUrl) {
-            this.index = new csi_1.default({ filehandle: new generic_filehandle_1.RemoteFile(csiUrl) });
+            const csiUrlObj = new URL(csiUrl);
+            const csiUrlUsername = csiUrlObj.username;
+            const csiUrlPassword = csiUrlObj.password;
+            if (csiUrlUsername && csiUrlPassword) {
+                csiUrl = `${csiUrlObj.protocol}//${csiUrlObj.host}${csiUrlObj.pathname}${csiUrlObj.search}`;
+                this.index = new csi_1.default({
+                    filehandle: new apr144_generic_filehandle_1.RemoteFile(csiUrl, {
+                        auth: { user: csiUrlUsername, password: csiUrlPassword },
+                    }),
+                });
+            }
+            else {
+                this.index = new csi_1.default({ filehandle: new apr144_generic_filehandle_1.RemoteFile(csiUrl) });
+            }
         }
         else if (baiFilehandle) {
             this.index = new bai_1.default({ filehandle: baiFilehandle });
         }
         else if (baiPath) {
-            this.index = new bai_1.default({ filehandle: new generic_filehandle_1.LocalFile(baiPath) });
+            this.index = new bai_1.default({ filehandle: new apr144_generic_filehandle_1.LocalFile(baiPath) });
         }
         else if (baiUrl) {
-            this.index = new bai_1.default({ filehandle: new generic_filehandle_1.RemoteFile(baiUrl) });
+            const baiUrlObj = new URL(baiUrl);
+            const baiUrlUsername = baiUrlObj.username;
+            const baiUrlPassword = baiUrlObj.password;
+            if (baiUrlUsername && baiUrlPassword) {
+                baiUrl = `${baiUrlObj.protocol}//${baiUrlObj.host}${baiUrlObj.pathname}${baiUrlObj.search}`;
+                this.index = new bai_1.default({
+                    filehandle: new apr144_generic_filehandle_1.RemoteFile(baiUrl, {
+                        auth: { user: baiUrlUsername, password: baiUrlPassword },
+                    }),
+                });
+            }
+            else {
+                this.index = new bai_1.default({ filehandle: new apr144_generic_filehandle_1.RemoteFile(baiUrl) });
+            }
         }
         else if (bamPath) {
-            this.index = new bai_1.default({ filehandle: new generic_filehandle_1.LocalFile(`${bamPath}.bai`) });
+            this.index = new bai_1.default({ filehandle: new apr144_generic_filehandle_1.LocalFile(`${bamPath}.bai`) });
         }
         else if (bamUrl) {
-            this.index = new bai_1.default({ filehandle: new generic_filehandle_1.RemoteFile(`${bamUrl}.bai`) });
+            const bamOnlyUrlObj = new URL(bamUrl);
+            const bamOnlyUrlUsername = bamOnlyUrlObj.username;
+            const bamOnlyUrlPassword = bamOnlyUrlObj.password;
+            if (bamOnlyUrlUsername && bamOnlyUrlPassword) {
+                bamUrl = `${bamOnlyUrlObj.protocol}//${bamOnlyUrlObj.host}${bamOnlyUrlObj.pathname}${bamOnlyUrlObj.search}`;
+                this.index = new bai_1.default({
+                    filehandle: new apr144_generic_filehandle_1.RemoteFile(`${bamUrl}.bai`, {
+                        auth: { user: bamOnlyUrlUsername, password: bamOnlyUrlPassword },
+                    }),
+                });
+            }
+            else {
+                this.index = new bai_1.default({ filehandle: new apr144_generic_filehandle_1.RemoteFile(`${bamUrl}.bai`) });
+            }
         }
         else if (htsget) {
             this.htsget = true;

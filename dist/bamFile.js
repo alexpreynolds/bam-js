@@ -167,13 +167,12 @@ class BamFile {
             this.index = new bai_1.default({ filehandle: new apr144_generic_filehandle_1.LocalFile(baiPath) });
         }
         else if (baiUrl) {
-            console.log(`A1`);
             const baiUrlObj = new URL(baiUrl);
             const baiUrlUsername = baiUrlObj.username;
             const baiUrlPassword = baiUrlObj.password;
             if (baiUrlUsername && baiUrlPassword) {
-                console.log(`A2 | ${baiUrlUsername} | ${baiUrlPassword}`);
                 baiUrl = `${baiUrlObj.protocol}//${baiUrlObj.host}${baiUrlObj.pathname}${baiUrlObj.search}`;
+                console.log(`baiUrl | ${baiUrl} | ${baiUrlUsername} | ${baiUrlPassword}`);
                 this.index = new bai_1.default({
                     filehandle: new apr144_generic_filehandle_1.RemoteFile(baiUrl, {
                         auth: { user: baiUrlUsername, password: baiUrlPassword },
@@ -181,7 +180,6 @@ class BamFile {
                 });
             }
             else {
-                console.log(`A3`);
                 this.index = new bai_1.default({ filehandle: new apr144_generic_filehandle_1.RemoteFile(baiUrl) });
             }
         }

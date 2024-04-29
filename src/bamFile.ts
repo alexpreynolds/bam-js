@@ -150,10 +150,12 @@ export default class BamFile {
     } else if (baiPath) {
       this.index = new BAI({ filehandle: new LocalFile(baiPath) })
     } else if (baiUrl) {
+      console.log(`A1`)
       const baiUrlObj = new URL(baiUrl)
       const baiUrlUsername = baiUrlObj.username
       const baiUrlPassword = baiUrlObj.password
       if (baiUrlUsername && baiUrlPassword) {
+        console.log(`A2`)
         baiUrl = `${baiUrlObj.protocol}//${baiUrlObj.host}${baiUrlObj.pathname}${baiUrlObj.search}`
         this.index = new BAI({
           filehandle: new RemoteFile(baiUrl, {
@@ -161,6 +163,7 @@ export default class BamFile {
           }),
         })
       } else {
+        console.log(`A3`)
         this.index = new BAI({ filehandle: new RemoteFile(baiUrl) })
       }
     } else if (bamPath) {

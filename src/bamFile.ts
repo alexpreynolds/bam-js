@@ -106,7 +106,16 @@ export default class BamFile {
     } else if (bamPath) {
       this.bam = new LocalFile(bamPath)
     } else if (bamUrl) {
-      this.bam = new RemoteFile(bamUrl)
+      const bamUrlObj = new URL(bamUrl)
+      const bamUrlUsername = bamUrlObj.username
+      const bamUrlPassword = bamUrlObj.password
+      if (bamUrlUsername && bamUrlPassword) {
+        bamUrl = `${bamUrlObj.protocol}//${bamUrlObj.host}${bamUrlObj.pathname}${bamUrlObj.search}`
+        this.bam = new RemoteFile(bamUrl, { auth: { bamUrlUsername, bamUrlPassword } })
+      }
+      else {
+        this.bam = new RemoteFile(bamUrl)
+      }
     } else if (htsget) {
       this.htsget = true
       this.bam = new NullFilehandle()
@@ -118,17 +127,44 @@ export default class BamFile {
     } else if (csiPath) {
       this.index = new CSI({ filehandle: new LocalFile(csiPath) })
     } else if (csiUrl) {
-      this.index = new CSI({ filehandle: new RemoteFile(csiUrl) })
+      const csiUrlObj = new URL(csiUrl)
+      const csiUrlUsername = csiUrlObj.username
+      const csiUrlPassword = csiUrlObj.password
+      if (csiUrlUsername && csiUrlPassword) {
+        csiUrl = `${csiUrlObj.protocol}//${csiUrlObj.host}${csiUrlObj.pathname}${csiUrlObj.search}`
+        this.index = new CSI({ filehandle: new RemoteFile(csiUrl, { auth: { csiUrlUsername, csiUrlPassword } }) })
+      }
+      else {
+        this.index = new CSI({ filehandle: new RemoteFile(csiUrl) })
+      }
     } else if (baiFilehandle) {
       this.index = new BAI({ filehandle: baiFilehandle })
     } else if (baiPath) {
       this.index = new BAI({ filehandle: new LocalFile(baiPath) })
     } else if (baiUrl) {
-      this.index = new BAI({ filehandle: new RemoteFile(baiUrl) })
+      const baiUrlObj = new URL(baiUrl)
+      const baiUrlUsername = baiUrlObj.username
+      const baiUrlPassword = baiUrlObj.password
+      if (baiUrlUsername && baiUrlPassword) {
+        baiUrl = `${baiUrlObj.protocol}//${baiUrlObj.host}${baiUrlObj.pathname}${baiUrlObj.search}`
+        this.index = new BAI({ filehandle: new RemoteFile(baiUrl, { auth: { baiUrlUsername, baiUrlPassword } }) })
+      }
+      else {
+        this.index = new BAI({ filehandle: new RemoteFile(baiUrl) })
+      }
     } else if (bamPath) {
       this.index = new BAI({ filehandle: new LocalFile(`${bamPath}.bai`) })
     } else if (bamUrl) {
-      this.index = new BAI({ filehandle: new RemoteFile(`${bamUrl}.bai`) })
+      const bamOnlyUrlObj = new URL(bamUrl)
+      const bamOnlyUrlUsername = bamOnlyUrlObj.username
+      const bamOnlyUrlPassword = bamOnlyUrlObj.password
+      if (bamOnlyUrlUsername && bamOnlyUrlPassword) {
+        bamUrl = `${bamOnlyUrlObj.protocol}//${bamOnlyUrlObj.host}${bamOnlyUrlObj.pathname}${bamOnlyUrlObj.search}`
+        this.index = new BAI({ filehandle: new RemoteFile(`${bamUrl}.bai`, { auth: { bamOnlyUrlUsername, bamOnlyUrlPassword } }) })
+      }
+      else {
+        this.index = new BAI({ filehandle: new RemoteFile(`${bamUrl}.bai`) })
+      }
     } else if (htsget) {
       this.htsget = true
     } else {

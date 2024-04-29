@@ -1,6 +1,6 @@
 {
   "name": "apr144-bam",
-  "version": "2.0.0-rs-042624-002",
+  "version": "2.0.0-rs-042624-004",
   "description": "Parser for BAM and BAM index (bai) files",
   "license": "MIT",
   "repository": "alexpreynolds/bam-js",
@@ -30,7 +30,8 @@
     "prebuild": "npm run clean && npm run lint",
     "preversion": "npm run lint && npm test && npm run build",
     "version": "standard-changelog && git add CHANGELOG.md",
-    "postversion": "git push --follow-tags"
+    "postversion": "git push --follow-tags",
+    "reinstall": "npm run clean && npm install"
   },
   "keywords": [
     "bionode",
@@ -42,7 +43,7 @@
     "@gmod/bgzf-filehandle": "^1.4.4",
     "abortable-promise-cache": "^1.5.0",
     "buffer-crc32": "^0.2.13",
-    "apr144-generic-filehandle": "3.1.1-042624-001",
+    "apr144-generic-filehandle": "3.1.1-042624-002",
     "long": "^4.0.0",
     "quick-lru": "^4.0.0"
   },

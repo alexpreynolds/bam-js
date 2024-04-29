@@ -155,7 +155,7 @@ export default class BamFile {
       const baiUrlUsername = baiUrlObj.username
       const baiUrlPassword = baiUrlObj.password
       if (baiUrlUsername && baiUrlPassword) {
-        console.log(`A2`)
+        console.log(`A2 | ${baiUrlUsername} | ${baiUrlPassword}`)
         baiUrl = `${baiUrlObj.protocol}//${baiUrlObj.host}${baiUrlObj.pathname}${baiUrlObj.search}`
         this.index = new BAI({
           filehandle: new RemoteFile(baiUrl, {

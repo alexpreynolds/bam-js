@@ -172,7 +172,7 @@ class BamFile {
             const baiUrlUsername = baiUrlObj.username;
             const baiUrlPassword = baiUrlObj.password;
             if (baiUrlUsername && baiUrlPassword) {
-                console.log(`A2`);
+                console.log(`A2 | ${baiUrlUsername} | ${baiUrlPassword}`);
                 baiUrl = `${baiUrlObj.protocol}//${baiUrlObj.host}${baiUrlObj.pathname}${baiUrlObj.search}`;
                 this.index = new bai_1.default({
                     filehandle: new apr144_generic_filehandle_1.RemoteFile(baiUrl, {

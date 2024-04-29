@@ -35,6 +35,7 @@ export default class BAI extends IndexFile {
 
   // fetch and parse the index
   async _parse(opts?: BaseOpts) {
+    console.log(`BAI: ${JSON.stringify(opts)}`)
     const bytes = (await this.filehandle.readFile(opts)) as Buffer
 
     // check BAI magic numbers

@@ -1,6 +1,6 @@
 {
   "name": "apr144-bam",
-  "version": "2.0.0-rs-042624-005",
+  "version": "2.0.0-rs-042624-006",
   "description": "Parser for BAM and BAM index (bai) files",
   "license": "MIT",
   "repository": "alexpreynolds/bam-js",

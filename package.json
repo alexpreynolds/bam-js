@@ -1,6 +1,6 @@
 {
   "name": "apr144-bam",
-  "version": "2.0.0-rs-042624-013",
+  "version": "2.0.0-rs-042624-014",
   "description": "Parser for BAM and BAM index (bai) files",
   "license": "MIT",
   "repository": "alexpreynolds/bam-js",
@@ -43,7 +43,7 @@
     "@gmod/bgzf-filehandle": "^1.4.4",
     "abortable-promise-cache": "^1.5.0",
     "buffer-crc32": "^0.2.13",
-    "apr144-generic-filehandle": "3.1.1-042624-009",
+    "apr144-generic-filehandle": "3.1.1-042624-010",
     "long": "^4.0.0",
     "quick-lru": "^4.0.0"
   },

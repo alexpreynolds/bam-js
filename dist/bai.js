@@ -45,7 +45,7 @@ class BAI extends indexFile_1.default {
     // fetch and parse the index
     _parse(opts) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(`BAI: ${JSON.stringify(opts)}`);
+            // console.log(`BAI: ${JSON.stringify(opts)}`)
             const bytes = (yield this.filehandle.readFile(opts));
             // check BAI magic numbers
             if (bytes.readUInt32LE(0) !== BAI_MAGIC) {

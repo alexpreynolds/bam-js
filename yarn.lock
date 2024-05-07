@@ -959,10 +959,10 @@
     "normalize-path" "^3.0.0"
     "picomatch" "^2.0.4"
 
-"apr144-generic-filehandle@3.1.1-042624-003":
-  "integrity" "sha512-ss70m3A2DWsQp2J1ogw/avS4jzn/ZNoGO+Yg3dNT8qEhUf7p3s88s0Fc3TWcSv4BM+ZmH1xoXbJzf+eN1YNFpA=="
-  "resolved" "https://registry.npmjs.org/apr144-generic-filehandle/-/apr144-generic-filehandle-3.1.1-042624-003.tgz"
-  "version" "3.1.1-042624-003"
+"apr144-generic-filehandle@3.1.1-042624-006":
+  "integrity" "sha512-8qjWIIilM5egLzbocsc3q82rnBMpWkX5mo21gsjr0g/DRmQvXHNcsdwtSwtyjCQjx5r2oOlmDXsWRscYhDIJrg=="
+  "resolved" "https://registry.npmjs.org/apr144-generic-filehandle/-/apr144-generic-filehandle-3.1.1-042624-006.tgz"
+  "version" "3.1.1-042624-006"
   dependencies:
     "base-64" "^1.0.0"
     "es6-promisify" "^6.1.1"

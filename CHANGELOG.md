@@ -1,16 +1,23 @@
-# [2.0.0](https://github.com/GMOD/bam-js/compare/v1.1.18...v2.0.0) (2023-06-08)
+## [2.0.2](https://github.com/GMOD/bam-js/compare/v2.0.1...v2.0.2) (2024-02-21)
 
+- Update typescript-eslint config and related fixes
+
+## [2.0.1](https://github.com/GMOD/bam-js/compare/v2.0.0...v2.0.1) (2024-2-20)
+
+- Update to buffer-crc32 1.0.0
+- Fix BAM header parsing of refNames containing a :
+
+# [2.0.0](https://github.com/GMOD/bam-js/compare/v1.1.18...v2.0.0) (2023-06-08)
 
 ### Features
 
-* explicit buffer import ([#98](https://github.com/GMOD/bam-js/issues/98)) ([66de9f4](https://github.com/GMOD/bam-js/commit/66de9f4ce30e3ff647d5297f093695e92ec9227c))
+- explicit buffer import ([#98](https://github.com/GMOD/bam-js/issues/98))
+  ([66de9f4](https://github.com/GMOD/bam-js/commit/66de9f4ce30e3ff647d5297f093695e92ec9227c))
 
-
-
-- Add explicit buffer import
-- Remove cross-fetch and object.entries polyfills
-- Improve typescripting
-- Remove chunkSizeLimit and fetchSizeLimit
+* Add explicit buffer import
+* Remove cross-fetch and object.entries polyfills
+* Improve typescripting
+* Remove chunkSizeLimit and fetchSizeLimit
 
 ## [1.1.18](https://github.com/GMOD/bam-js/compare/v1.1.17...v1.1.18) (2022-12-17)
 

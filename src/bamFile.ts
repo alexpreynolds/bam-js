@@ -1,11 +1,7 @@
 import { Buffer } from 'buffer'
 import crc32 from 'buffer-crc32'
 import { unzip, unzipChunkSlice } from '@gmod/bgzf-filehandle'
-import {
-  LocalFile,
-  RemoteFile,
-  GenericFilehandle,
-} from 'apr144-generic-filehandle'
+import { LocalFile, RemoteFile, GenericFilehandle } from 'generic-filehandle'
 import AbortablePromiseCache from 'abortable-promise-cache'
 import QuickLRU from 'quick-lru'
 import Reservoir from 'reservoir'
@@ -116,7 +112,13 @@ export default class BamFile {
       if (bamUrlUsername && bamUrlPassword) {
         bamUrl = `${bamUrlObj.protocol}//${bamUrlObj.host}${bamUrlObj.pathname}${bamUrlObj.search}`
         this.bam = new RemoteFile(bamUrl, {
-          auth: { user: bamUrlUsername, password: bamUrlPassword },
+          overrides: {
+            credentials: 'include',
+            headers: {
+              Authorization:
+                'Basic ' + btoa(bamUrlUsername + ':' + bamUrlPassword),
+            },
+          },
         })
       } else {
         this.bam = new RemoteFile(bamUrl)
@@ -139,7 +141,13 @@ export default class BamFile {
         csiUrl = `${csiUrlObj.protocol}//${csiUrlObj.host}${csiUrlObj.pathname}${csiUrlObj.search}`
         this.index = new CSI({
           filehandle: new RemoteFile(csiUrl, {
-            auth: { user: csiUrlUsername, password: csiUrlPassword },
+            overrides: {
+              credentials: 'include',
+              headers: {
+                Authorization:
+                  'Basic ' + btoa(csiUrlUsername + ':' + csiUrlPassword),
+              },
+            },
           }),
         })
       } else {
@@ -160,7 +168,13 @@ export default class BamFile {
         // )
         this.index = new BAI({
           filehandle: new RemoteFile(baiUrl, {
-            auth: { user: baiUrlUsername, password: baiUrlPassword },
+            overrides: {
+              credentials: 'include',
+              headers: {
+                Authorization:
+                  'Basic ' + btoa(baiUrlUsername + ':' + baiUrlPassword),
+              },
+            },
           }),
         })
       } else {
@@ -176,7 +190,14 @@ export default class BamFile {
         bamUrl = `${bamOnlyUrlObj.protocol}//${bamOnlyUrlObj.host}${bamOnlyUrlObj.pathname}${bamOnlyUrlObj.search}`
         this.index = new BAI({
           filehandle: new RemoteFile(`${bamUrl}.bai`, {
-            auth: { user: bamOnlyUrlUsername, password: bamOnlyUrlPassword },
+            overrides: {
+              credentials: 'include',
+              headers: {
+                Authorization:
+                  'Basic ' +
+                  btoa(bamOnlyUrlUsername + ':' + bamOnlyUrlPassword),
+              },
+            },
           }),
         })
       } else {

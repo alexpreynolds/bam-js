@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { Buffer } from 'buffer';
-import { GenericFilehandle } from 'apr144-generic-filehandle';
+import { GenericFilehandle } from 'generic-filehandle';
 import BAI from './bai';
 import CSI from './csi';
 import Chunk from './chunk';

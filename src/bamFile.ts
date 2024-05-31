@@ -206,15 +206,15 @@ export default class BamFile {
     let buffer
     if (ret) {
       const s = ret + blockLen
-      console.log(`[bam-js] reading header [ ret ${ret} | s ${s} ]`)
+      // console.log(`[bam-js] reading header [ ret ${ret} | s ${s} ]`)
       const res = await this.bam.read(Buffer.alloc(s), 0, s, 0, opts)
       if (!res.bytesRead) {
         throw new Error('Error reading header')
       }
       buffer = res.buffer.subarray(0, Math.min(res.bytesRead, ret))
-      console.log(`[bam-js] reading header [ res.bytesRead ${res.bytesRead} ]`)
+      // console.log(`[bam-js] reading header [ res.bytesRead ${res.bytesRead} ]`)
     } else {
-      console.log(`[bam-js] reading all of header`)
+      // console.log(`[bam-js] reading all of header`)
       buffer = await this.bam.readFile(opts)
     }
 

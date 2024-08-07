@@ -64,6 +64,7 @@ export function canMergeBlocks(chunk1: Chunk, chunk2: Chunk) {
 }
 
 export interface BamOpts {
+  assemblyName?: string
   viewAsPairs?: boolean
   pairAcrossChr?: boolean
   maxInsertSize?: number
@@ -71,6 +72,7 @@ export interface BamOpts {
 }
 
 export interface BaseOpts {
+  assemblyName?: string
   signal?: AbortSignal
 }
 

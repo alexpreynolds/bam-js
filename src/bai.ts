@@ -102,7 +102,7 @@ export default class BAI extends IndexFile {
         firstDataLine = findFirstData(firstDataLine, offset)
         linearIndex[j] = offset
       }
-
+      // console.log(`indices[i]: ${JSON.stringify(indices[i])}`)
       indices[i] = { binIndex, linearIndex, stats }
     }
 

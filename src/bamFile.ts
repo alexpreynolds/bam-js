@@ -196,6 +196,139 @@ export default class BamFile {
 
   async getHeaderPre(origOpts?: BaseOpts) {
     const opts = makeOpts(origOpts)
+    // console.log(`[bam-js] getHeaderPre: ${JSON.stringify(opts)}`)
+    if (opts.assemblyName && opts.assemblyName === 'hg38') {
+      this.chrToIndex = {
+        chr1: 0,
+        chr10: 1,
+        chr11: 2,
+        chr12: 3,
+        chr13: 4,
+        chr14: 5,
+        chr15: 6,
+        chr16: 7,
+        chr17: 8,
+        chr18: 9,
+        chr19: 10,
+        chr2: 11,
+        chr20: 12,
+        chr21: 13,
+        chr22: 14,
+        chr3: 15,
+        chr4: 16,
+        chr5: 17,
+        chr6: 18,
+        chr7: 19,
+        chr8: 20,
+        chr9: 21,
+        chrM: 22,
+        chrX: 23,
+        chrY: 24,
+      }
+      this.indexToChr = [
+        {
+          refName: 'chr1',
+          length: 248956422,
+        },
+        {
+          refName: 'chr10',
+          length: 133797422,
+        },
+        {
+          refName: 'chr11',
+          length: 135086622,
+        },
+        {
+          refName: 'chr12',
+          length: 133275309,
+        },
+        {
+          refName: 'chr13',
+          length: 114364328,
+        },
+        {
+          refName: 'chr14',
+          length: 107043718,
+        },
+        {
+          refName: 'chr15',
+          length: 101991189,
+        },
+        {
+          refName: 'chr16',
+          length: 90338345,
+        },
+        {
+          refName: 'chr17',
+          length: 83257441,
+        },
+        {
+          refName: 'chr18',
+          length: 80373285,
+        },
+        {
+          refName: 'chr19',
+          length: 58617616,
+        },
+        {
+          refName: 'chr2',
+          length: 242193529,
+        },
+        {
+          refName: 'chr20',
+          length: 64444167,
+        },
+        {
+          refName: 'chr21',
+          length: 46709983,
+        },
+        {
+          refName: 'chr22',
+          length: 50818468,
+        },
+        {
+          refName: 'chr3',
+          length: 198295559,
+        },
+        {
+          refName: 'chr4',
+          length: 190214555,
+        },
+        {
+          refName: 'chr5',
+          length: 181538259,
+        },
+        {
+          refName: 'chr6',
+          length: 170805979,
+        },
+        {
+          refName: 'chr7',
+          length: 159345973,
+        },
+        {
+          refName: 'chr8',
+          length: 145138636,
+        },
+        {
+          refName: 'chr9',
+          length: 138394717,
+        },
+        {
+          refName: 'chrM',
+          length: 16569,
+        },
+        {
+          refName: 'chrX',
+          length: 156040895,
+        },
+        {
+          refName: 'chrY',
+          length: 57227415,
+        },
+      ]
+      return
+    }
     if (!this.index) {
       return
     }
@@ -301,6 +434,8 @@ export default class BamFile {
         return this._readRefSeqs(start, refSeqBytes * 2, opts)
       }
     }
+    // console.log(`[bam-js] chrToIndex: ${JSON.stringify(chrToIndex)}`)
+    // console.log(`[bam-js] indexToChr: ${JSON.stringify(indexToChr)}`)
     return { chrToIndex, indexToChr }
   }
 
@@ -319,7 +454,11 @@ export default class BamFile {
     max: number,
     opts?: BamOpts,
   ) {
-    await this.getHeader(opts)
+    // console.log(`[bam-js] streamRecordsForRange: ${JSON.stringify(opts)}`)
+    // console.log(`[bam-js] opts?.assemblyName ${opts?.assemblyName}`)
+    if (opts?.assemblyName && opts?.assemblyName !== 'hg38') {
+      await this.getHeader(opts)
+    }
     const chrId = this.chrToIndex?.[chr]
     if (chrId === undefined || !this.index) {
       yield []
